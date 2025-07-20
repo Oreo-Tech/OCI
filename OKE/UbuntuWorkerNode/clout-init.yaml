@@ -1,0 +1,18 @@
+#cloud-config
+apt:
+ sources:
+   oke-node: {source: 'deb [trusted=yes] https://odx-oke.objectstorage.us-sanjose-1.oci.customer-oci.com/n/odx-oke/b/okn-repositories/o/prod/ubuntu-jammy/kubernetes-1.33 stable main'}
+bootcmd:
+ - apt-get update
+packages:
+ - oci-oke-node-all-1.33.1
+write_files:
+- path: /etc/oke/oke-apiserver
+  permissions: '0644'
+  content: <OKE Private API Endpoint>
+- encoding: b64
+  path: /etc/kubernetes/ca.crt
+  permissions: '0644'
+  content: LS0t---LS0tCg==
+runcmd:
+  - oke bootstrap --ca LS0t---LS0tCg== --apiserver-host <OKE Private API Endpoint>
