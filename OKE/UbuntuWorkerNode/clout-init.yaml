@@ -1,11 +1,11 @@
 #cloud-config
 apt:
  sources:
-   oke-node: {source: 'deb [trusted=yes] https://odx-oke.objectstorage.us-sanjose-1.oci.customer-oci.com/n/odx-oke/b/okn-repositories/o/prod/ubuntu-jammy/kubernetes-1.33 stable main'}
+   oke-node: {source: 'deb [trusted=yes] https://odx-oke.objectstorage.us-sanjose-1.oci.customer-oci.com/n/odx-oke/b/okn-repositories/o/prod/ubuntu-jammy/kubernetes-<major-version> stable main'}
 bootcmd:
  - apt-get update
 packages:
- - oci-oke-node-all-1.33.1
+ - oci-oke-node-all-<kubernetes version with minor>
 write_files:
 - path: /etc/oke/oke-apiserver
   permissions: '0644'
@@ -13,6 +13,6 @@ write_files:
 - encoding: b64
   path: /etc/kubernetes/ca.crt
   permissions: '0644'
-  content: LS0t---LS0tCg==
+  content: <Cluster CA Cert eg: LS0t---LS0tCg==>
 runcmd:
-  - oke bootstrap --ca LS0t---LS0tCg== --apiserver-host <OKE Private API Endpoint>
+  - oke bootstrap --ca <Cluster CA Cert eg: LS0t---LS0tCg==> --apiserver-host <OKE Private API Endpoint>
